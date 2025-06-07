@@ -524,6 +524,8 @@ dependencies = [
  "jsonxf",
  "mime",
  "reqwest",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
