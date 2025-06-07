@@ -1,0 +1,21 @@
+[package]
+name = "http"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["kevin.yang.xgz@gmail.com"]
+description = "A simple HTTP client"
+repository = "https://github.com/kevin-yang-xgz/httpie"
+documentation = "https://docs.rs/httpie"
+categories = ["cli"]
+keywords = ["http", "cli"]
+
+
+[dependencies]
+anyhow = "1.0.98"
+clap = { version = "4.5.39", features = ["derive"] }
+colored = "3.0.0"
+jsonxf = "1.1.1"
+mime = "0.3.17"
+reqwest = { version = "0.12.19", features = ["rustls-tls"] }
+tokio = { version = "1.45.1", features = ["full"] }

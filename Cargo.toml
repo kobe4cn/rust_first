@@ -1,0 +1,3 @@
+[workspace] 
+ members = ["httpie", "scrape_url"] 
+ resolver = "2"
