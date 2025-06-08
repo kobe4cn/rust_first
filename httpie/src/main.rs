@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use colored::Colorize;
-use reqwest::{Method, Url};
+use reqwest::{Method, Response, Url};
 use serde::Serialize;
 use serde_json;
 
@@ -80,12 +80,16 @@ async fn main() -> Result<()> {
     }
     Ok(())
 }
+
 #[allow(dead_code)]
 async fn request(url: &str, method: &str, data: &[KeyPair]) -> Result<()> {
     let client = reqwest::Client::new();
     let mut req = client.request(Method::from_str(method)?, url);
 
     req = req.header("Content-Type", "application/json");
+    req = req.header("User-Agent", "Rust httpie");
+
+    // println!("data: {:?}", data);
     if !data.is_empty() {
         let mut map = HashMap::new();
         for pair in data {
@@ -95,6 +99,25 @@ async fn request(url: &str, method: &str, data: &[KeyPair]) -> Result<()> {
         req = req.body(json_data);
     }
     let res = req.send().await?;
+    print_response(res).await?;
+    Ok(())
+}
+
+fn color_json(json_str: &str) -> String {
+    json_str
+        .lines()
+        .map(|line| {
+            if let Some((key, value)) = line.split_once(':') {
+                format!("{}{}{}", key.red(), ":".to_string(), value.yellow())
+            } else {
+                line.to_string()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("\n")
+}
+
+async fn print_response(res: Response) -> Result<()> {
     let version = format!("{:?}", res.version()).blue();
     let status = res.status().to_string();
     let (code, str) = status
@@ -115,18 +138,4 @@ async fn request(url: &str, method: &str, data: &[KeyPair]) -> Result<()> {
         println!("{}", color_json(&formatted));
     }
     Ok(())
-}
-
-fn color_json(json_str: &str) -> String {
-    json_str
-        .lines()
-        .map(|line| {
-            if let Some((key, value)) = line.split_once(':') {
-                format!("{}{}{}", key.red(), ":".to_string(), value.yellow())
-            } else {
-                line.to_string()
-            }
-        })
-        .collect::<Vec<String>>()
-        .join("\n")
 }
