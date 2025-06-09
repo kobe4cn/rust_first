@@ -1,3 +1,11 @@
-[workspace] 
- members = ["httpie", "scrape_url"] 
- resolver = "2"
+[workspace]
+members = ["httpie", "scrape_url"]
+resolver = "2"
+
+[workspace.dependencies]
+anyhow = "1.0.98"
+clap = { version = "4.5.39", features = ["derive"] }
+reqwest = { version = "0.12.19", features = ["rustls-tls", "blocking"] }
+tokio = { version = "1.45.1", features = ["full"] }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.140"
