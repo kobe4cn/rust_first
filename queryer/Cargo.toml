@@ -1,0 +1,26 @@
+[package]
+name = "queryer"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Queryer"
+
+[[example]]
+name = "dialect"
+[[example]]
+name = "covid"
+
+[dependencies]
+anyhow.workspace = true
+async-trait = "0.1.88"
+polars = { version = "0.48.1", features = ["lazy"] }
+polars-plan = { version = "0.48.1"}
+reqwest = { workspace = true, features = ["rustls-tls"] }
+sqlparser = "0.56.0"
+tokio = { workspace = true, features = ["fs"] }
+tracing.workspace = true
+
+
+[dev-dependencies]
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true, features = ["full"] }

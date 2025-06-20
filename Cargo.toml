@@ -1,5 +1,5 @@
 [workspace]
-members = ["httpie", "scrape_url", "thumbor"]
+members = ["httpie", "queryer", "scrape_url", "thumbor"]
 resolver = "2"
 
 [workspace.dependencies]

@@ -126,6 +126,7 @@ pub fn print_test_url(url: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Result;
 
     #[test]
     fn test_image_spec() {
@@ -147,5 +148,17 @@ mod tests {
         let image_spec_str: String = (&image_spec).into();
 
         assert_eq!(image_spec, image_spec_str.as_str().try_into().unwrap());
+    }
+
+    #[tokio::test]
+    async fn test_print_test_url() -> Result<()> {
+        let url = "https://icock.cn/storage/mini-icoko/h5-referer/index.html?refererUrl=https%3A%2F%2Fhonorwall.icoke.cn%2F%3Fcode%3D0c3wKj200abXtU12c7100pKm6u1wKj2E%26campaignCode%3D202412HonorWall%26utm_content%3D1011%26mplink%3D%252FcokePages%252Fh5%252FtabBar%252Findex%26longitude%3D119.68294400364714%26latitude%3D36.843243359197146%26benchmarkLevel%3D-1%26campaignName%3D%E5%BF%AB%E4%B9%90%E8%97%8F%E7%93%B6%26webViewEnv%3Dwechat";
+        let data = url.as_bytes();
+        let data = BASE64_URL_SAFE_NO_PAD.encode(data);
+        println!("{}", data);
+        let url_ = BASE64_URL_SAFE_NO_PAD.decode(data.as_bytes())?;
+        println!("{:?}", String::from_utf8(url_.clone())?);
+        assert!(url_ == url.as_bytes());
+        Ok(())
     }
 }
