@@ -3,7 +3,7 @@ use std::ops::{Deref, DerefMut};
 use polars::{
     frame::DataFrame,
     io::SerWriter,
-    prelude::{CsvWriter, IntoLazy, PlSmallStr, SortMultipleOptions, col},
+    prelude::{CsvWriter, IntoLazy, PlSmallStr, SortMultipleOptions},
 };
 
 mod convert;

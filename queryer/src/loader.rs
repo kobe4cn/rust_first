@@ -39,7 +39,7 @@ impl Load for CsvLoader {
 
 #[cfg(test)]
 mod tests {
-    use polars::prelude::{IntoLazy, col};
+    use polars::prelude::IntoLazy;
 
     use super::*;
 
