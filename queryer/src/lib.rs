@@ -7,14 +7,15 @@ use polars::{
 };
 
 mod convert;
-mod dialect;
+pub mod dialect;
 mod fetcher;
 mod loader;
 use anyhow::Result;
+pub use dialect::*;
 use sqlparser::parser::Parser;
 use tracing::info;
 
-use crate::{convert::Sql, dialect::TryDialect, fetcher::retrieve_data, loader::detect_content};
+use crate::{convert::Sql, fetcher::retrieve_data, loader::detect_content};
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

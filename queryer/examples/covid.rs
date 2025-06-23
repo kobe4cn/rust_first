@@ -1,7 +1,6 @@
-
 use anyhow::Result;
 
-use queryer::query;
+use queryer::{example_sql, query};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -9,9 +8,10 @@ async fn main() -> Result<()> {
     let sql = format!(
         "select location,total_cases,new_cases,total_deaths,new_deaths from {url} where new_deaths>100 order by new_deaths desc"
     );
+    // let sql = example_sql();
     let mut ds = query(&sql).await?;
     println!("{:?}", ds.head(Some(5)));
-    
+
     println!("{}", ds.to_csv()?);
 
     Ok(())

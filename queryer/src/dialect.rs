@@ -20,13 +20,7 @@ impl Dialect for TryDialect {
 pub fn example_sql() -> String {
     let url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.csv";
     let sql = format!(
-        "select a a1, b, 123, myfunc(b), * \
-        from {} \
-        where a > 10 \
-        order by a desc \
-        limit 10 \
-        offset 5",
-        url
+        "select location,total_cases,new_cases,total_deaths,new_deaths from {url} where new_deaths>100 order by new_deaths desc"
     );
     sql
 }
