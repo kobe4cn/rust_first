@@ -2,6 +2,7 @@ use serde::Deserialize;
 use std::borrow::Cow;
 
 #[derive(Debug, Deserialize)]
+#[allow(unused)]
 struct User<'input> {
     #[serde(borrow)]
     name: Cow<'input, str>,

@@ -13,7 +13,7 @@ impl MemTable {
     pub fn new() -> Self {
         Self::default()
     }
-
+    // 获取或创建表
     fn get_or_create_table(&self, table: &str) -> Ref<String, DashMap<String, Value>> {
         match self.table.get(table) {
             Some(table) => table,
