@@ -9,17 +9,22 @@ description = "Queryer"
 name = "dialect"
 [[example]]
 name = "covid"
+[[example]]
+name = "test"
 
 [dependencies]
 anyhow.workspace = true
 async-trait = "0.1.88"
 polars = { version = "0.48.1", features = ["lazy"] }
-polars-plan = { version = "0.48.1"}
+polars-plan = { version = "0.48.1" }
 reqwest = { workspace = true, features = ["rustls-tls"] }
 sqlparser = "0.56.0"
 tokio = { workspace = true, features = ["fs"] }
 tracing.workspace = true
-
+regex = "1.11.0"
+url = "2.5.1"
+serde = { workspace = true }
+serde_json = { workspace = true }
 
 [dev-dependencies]
 tracing-subscriber = { workspace = true }

@@ -4,7 +4,7 @@ members = [
     "queryer",
     "scrape_url",
     "thumbor",
-    "queryer-py",
+    "queryer-py", "kv",
 ]
 resolver = "2"
 
@@ -32,7 +32,9 @@ tower-http = { version = "0.6.1", features = [
     "trace",
     "fs",
 ] }
-
+futures = "0.3.31"
+async-prost = "0.4.0"
+thiserror = "2.0.10"
 tracing-subscriber = { version = "0.3.18", features = [
     "env-filter",
     "time",
@@ -40,3 +42,4 @@ tracing-subscriber = { version = "0.3.18", features = [
 ] }
 tracing = "0.1.40"
 uuid = { version = "1.14.0", features = ["v8"] }
+dashmap = "6.1.0"

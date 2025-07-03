@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use queryer::{example_sql, query};
+use queryer::query;
 
 #[tokio::main]
 async fn main() -> Result<()> {
