@@ -69,7 +69,7 @@ mod tests {
     fn hset_should_work() {
         let table = MemTable::new();
         let cmd = CommandRequest::new_hset("t1", "k1", "v1".into());
-        let cmd2 = CommandRequest::new_hset("t1", "k2", "v2".into());
+        let _cmd2 = CommandRequest::new_hset("t1", "k2", "v2".into());
 
         let resp = dispatch(cmd.clone(), &table);
 
