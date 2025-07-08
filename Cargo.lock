@@ -3901,6 +3901,7 @@ dependencies = [
  "clap",
  "colored",
  "dashmap 5.5.3",
+ "futures",
  "globset",
  "regex",
  "serde",
