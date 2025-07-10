@@ -1,6 +1,6 @@
 use crate::{Kvpair, Value, error::KvError};
 
-pub trait Storage {
+pub trait Storage:Send+Sync+'static {
     //获取一个key 的value
     fn get(&self, table: &str, key: &str) -> Result<Option<Value>, KvError>;
     //设置一个key 的value

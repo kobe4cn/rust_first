@@ -4,7 +4,7 @@ members = [
     "queryer",
     "scrape_url",
     "thumbor",
-    "queryer-py", "kv", "rgrep",
+    "queryer-py", "kv", "rgrep", "generics",
 ]
 resolver = "2"
 

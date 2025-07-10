@@ -4,10 +4,10 @@ use crate::{
 };
 
 pub trait CommandService {
-    fn exec(&self, storage: &impl Storage) -> CommandResponse;
+    fn exec(&self, storage: &dyn Storage) -> CommandResponse;
 }
 #[allow(unused)]
-pub fn dispatch(cmd: CommandRequest, storage: &impl Storage) -> CommandResponse {
+pub fn dispatch(cmd: CommandRequest, storage: &dyn Storage) -> CommandResponse {
     match cmd.request_data {
         Some(RequestData::Hget(params)) => params.exec(storage),
         Some(RequestData::Hgetall(params)) => params.exec(storage),
@@ -23,7 +23,7 @@ pub fn dispatch(cmd: CommandRequest, storage: &impl Storage) -> CommandResponse 
 }
 
 impl CommandService for Hget {
-    fn exec(&self, storage: &impl Storage) -> CommandResponse {
+    fn exec(&self, storage: &dyn Storage) -> CommandResponse {
         match storage.get(&self.table, &self.key) {
             Ok(Some(value)) => value.into(),
             Ok(None) => KvError::KeyNotFound.into(),
@@ -33,7 +33,7 @@ impl CommandService for Hget {
 }
 
 impl CommandService for Hset {
-    fn exec(&self, storage: &impl Storage) -> CommandResponse {
+    fn exec(&self, storage: &dyn Storage) -> CommandResponse {
         if let Some(pair) = self.pair.as_ref() {
             if pair.value.is_none() {
                 return KvError::Internal("value is required".into()).into();
@@ -51,7 +51,7 @@ impl CommandService for Hset {
 }
 
 impl CommandService for Hgetall {
-    fn exec(&self, storage: &impl Storage) -> CommandResponse {
+    fn exec(&self, storage: &dyn Storage) -> CommandResponse {
         match storage.get_all(&self.table) {
             Ok(pairs) => pairs.into(),
             Err(e) => e.into(),
