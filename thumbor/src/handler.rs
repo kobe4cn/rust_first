@@ -41,8 +41,8 @@ async fn generate(
         .map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
 
     //基于sepc 处理 data中的图片
-    let mut engine =
-        Photon::try_from(data).map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
+    let mut engine: Photon =
+        Photon::create(data).map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
     engine.apply(&spec.specs);
     let data = engine.process(ImageFormat::Png);
 

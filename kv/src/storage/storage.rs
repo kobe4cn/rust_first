@@ -1,6 +1,6 @@
 use crate::{Kvpair, Value, error::KvError};
 
-pub trait Storage:Send+Sync+'static {
+pub trait Storage: Send + Sync + 'static {
     //获取一个key 的value
     fn get(&self, table: &str, key: &str) -> Result<Option<Value>, KvError>;
     //设置一个key 的value
@@ -18,9 +18,32 @@ pub trait Storage:Send+Sync+'static {
 #[cfg(test)]
 mod tests {
 
-    use crate::MemTable;
+    use tempfile::tempdir;
+
+    use crate::{MemTable, sleddb::SledDb};
 
     use super::*;
+
+    #[test]
+    fn sleddb_basic_interface_should_work() {
+        let dir = tempdir().unwrap();
+        let store = SledDb::new(dir);
+        test_basic_interface(store);
+    }
+
+    // #[test]
+    // fn sleddb_get_all_should_work() {
+    //     let dir = tempdir().unwrap();
+    //     let store = SledDb::new(dir);
+    //     test_get_all(store);
+    // }
+
+    // #[test]
+    // fn sleddb_iter_should_work() {
+    //     let dir = tempdir().unwrap();
+    //     let store = SledDb::new(dir);
+    //     test_get_iter(store);
+    // }
 
     #[test]
 

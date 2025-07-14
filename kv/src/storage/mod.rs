@@ -2,6 +2,7 @@ use dashmap::{DashMap, mapref::one::Ref};
 
 use crate::{Kvpair, Value, error::KvError, storage::storage::Storage};
 
+pub mod sleddb;
 pub mod storage;
 
 #[derive(Debug, Clone, Default)]
@@ -50,11 +51,35 @@ impl Storage for MemTable {
             .collect())
     }
     fn get_iter(&self, table: &str) -> Result<Box<dyn Iterator<Item = Kvpair>>, KvError> {
-        let table = self.get_or_create_table(table);
-        let pairs: Vec<Kvpair> = table
-            .iter()
-            .map(|kv| Kvpair::new(kv.key(), kv.value().clone()))
-            .collect();
-        Ok(Box::new(pairs.into_iter()))
+        let table = self.get_or_create_table(table).clone();
+        let pairs = StorageIter::new(table.into_iter());
+        Ok(Box::new(pairs))
+    }
+}
+
+impl From<(String, Value)> for Kvpair {
+    fn from(kv: (String, Value)) -> Self {
+        Kvpair::new(&kv.0, kv.1)
+    }
+}
+
+pub struct StorageIter<T> {
+    data: T,
+}
+
+impl<T> StorageIter<T> {
+    pub fn new(data: T) -> Self {
+        Self { data }
+    }
+}
+
+impl<T> Iterator for StorageIter<T>
+where
+    T: Iterator,
+    T::Item: Into<Kvpair>,
+{
+    type Item = Kvpair;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.data.next().map(|kv| kv.into())
     }
 }

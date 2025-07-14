@@ -4,7 +4,10 @@ members = [
     "queryer",
     "scrape_url",
     "thumbor",
-    "queryer-py", "kv", "rgrep", "generics",
+    "queryer-py",
+    "kv",
+    "rgrep",
+    "generics",
 ]
 resolver = "2"
 
@@ -43,3 +46,6 @@ tracing-subscriber = { version = "0.3.18", features = [
 tracing = "0.1.40"
 uuid = { version = "1.14.0", features = ["v8"] }
 dashmap = "6.1.0"
+http = "1.2.1"
+sled = "0.34.7"
+tempfile = "3.10.0"

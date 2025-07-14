@@ -1,16 +1,20 @@
 use anyhow::Result;
-use kv::{CommandRequest, MemTable, Service, ServiceInner};
+use kv::{CommandRequest, Service, ServiceInner, sleddb::SledDb};
 use prost::Message;
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpListener,
 };
 use tracing::info;
-
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
-    let service: Service<MemTable> = ServiceInner::new(MemTable::new()).into();
+    let service: Service<SledDb> = ServiceInner::new(SledDb::new("tmp/kvserver"))
+        .fn_berfore_send(|res| match res.message.as_ref() {
+            "" => res.message = "message is empty".into(),
+            s => res.message = format!("{}:{}", s, res.status),
+        })
+        .into();
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
     info!("Listening on 127.0.0.1:8080");
     loop {

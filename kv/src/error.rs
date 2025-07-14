@@ -14,4 +14,8 @@ pub enum KvError {
     Internal(String),
     #[error("key not found")]
     KeyNotFound,
+    #[error("sled error: {0}")]
+    SledError(#[from] sled::Error),
+    #[error("prost error: {0}")]
+    ProstError(#[from] prost::DecodeError),
 }

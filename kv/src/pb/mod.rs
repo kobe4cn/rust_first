@@ -1,3 +1,6 @@
+use http::StatusCode;
+use prost::Message;
+
 use crate::{
     CommandRequest, CommandResponse, Hget, Hgetall, Hset, Kvpair, Value,
     command_request::RequestData, error::KvError, value,
@@ -55,14 +58,20 @@ impl From<&str> for Value {
         }
     }
 }
+impl From<&[u8]> for Value {
+    fn from(value: &[u8]) -> Self {
+        Self {
+            value: Some(value::Value::BytesValue(value.to_vec())),
+        }
+    }
+}
 
 impl From<Value> for CommandResponse {
     fn from(value: Value) -> Self {
         Self {
-            status: 200,
-            message: "success".to_string(),
+            status: StatusCode::OK.as_u16() as _,
             values: vec![value.into()],
-            pairs: vec![],
+            ..Default::default()
         }
     }
 }
@@ -71,13 +80,13 @@ impl From<KvError> for CommandResponse {
     fn from(error: KvError) -> Self {
         match error {
             KvError::KeyNotFound => Self {
-                status: 404,
+                status: StatusCode::NOT_FOUND.as_u16() as _,
                 message: "not found".to_string(),
                 values: vec![],
                 pairs: vec![],
             },
             _ => Self {
-                status: 500,
+                status: StatusCode::INTERNAL_SERVER_ERROR.as_u16() as _,
                 message: error.to_string(),
                 values: vec![],
                 pairs: vec![],
@@ -117,5 +126,18 @@ impl From<bool> for Value {
         Self {
             value: Some(value::Value::BoolValue(value)),
         }
+    }
+}
+
+impl Value {
+    pub fn try_from(value: &[u8]) -> Result<Self, KvError> {
+        Value::decode(value).map_err(KvError::ProstError)
+    }
+}
+impl TryFrom<Value> for Vec<u8> {
+    type Error = KvError;
+    fn try_from(value: Value) -> Result<Self, Self::Error> {
+        let value = value.encode_to_vec();
+        Ok(value)
     }
 }
