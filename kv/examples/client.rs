@@ -1,17 +1,21 @@
 use anyhow::Result;
+use bytes::Bytes;
+use futures::{SinkExt, StreamExt};
 use kv::{CommandRequest, CommandResponse};
 use prost::Message;
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpStream,
 };
+use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::info;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     let addr = "127.0.0.1:8080";
-    let mut stream = TcpStream::connect(addr).await?;
+    let stream = TcpStream::connect(addr).await?;
+    let mut stream = Framed::new(stream, LengthDelimitedCodec::new());
     let mut cmds = Vec::new();
     // 创建命令
     cmds.push(CommandRequest::new_hset("test", "key", "test".into()));
@@ -26,15 +30,13 @@ async fn main() -> Result<()> {
     for cmd in cmds {
         // 序列化并发送命令
         let data = cmd.encode_to_vec();
-        stream.write_all(&data).await?;
+        stream.send(Bytes::from(data)).await?;
 
         // 接收响应info!("Sent command");
 
         // 接收响应
-        let mut buffer = vec![0u8; 1024];
-        let n = stream.read(&mut buffer).await?;
-        if n > 0 {
-            let response = CommandResponse::decode(&buffer[..n])?;
+        if let Some(Ok(n)) = stream.next().await {
+            let response = CommandResponse::decode(&n[..])?;
             info!("Got response: {:?}", response);
         }
     }

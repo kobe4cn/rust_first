@@ -1,0 +1,16 @@
+[package]
+name = "xunmi-py"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "xunmi"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.25.1", features = ["extension-module"] }
+serde_json = { workspace = true }
+xunmi = { workspace = true }
+
+[build-dependencies]
+pyo3-build-config = "0.25.1"
