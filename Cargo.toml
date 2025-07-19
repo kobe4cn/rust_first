@@ -7,7 +7,7 @@ members = [
     "queryer-py",
     "kv",
     "rgrep",
-    "generics", "xunmi-py",
+    "generics", "xunmi-py", "mpsc-channel",
 ]
 resolver = "2"
 
