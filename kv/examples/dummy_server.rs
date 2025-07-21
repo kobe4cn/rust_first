@@ -3,7 +3,7 @@ use bytes::Bytes;
 use futures::{SinkExt as _, StreamExt};
 use kv::{CommandRequest, MemTable, Service, ServiceInner};
 use prost::Message;
-use tokio::{ net::TcpListener};
+use tokio::net::TcpListener;
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::info;
 

@@ -1,14 +1,21 @@
 use anyhow::Result;
 
 use futures::{SinkExt as _, StreamExt};
-use kv::{CommandRequest, Service, ServiceInner, sleddb::SledDb};
+use kv::{sleddb::SledDb, CommandRequest, Service, ServiceInner, TlsServerAcceptor};
 use prost::Message;
 use tokio::net::TcpListener;
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::info;
+const CA_CERT: &str = "fixtures/ca.cert";
+const CLIENT_CERT: &str = "fixtures/client.cert";
+const CLIENT_KEY: &str = "fixtures/client.key";
+const SERVER_CERT: &str = "fixtures/server.cert";
+const SERVER_KEY: &str = "fixtures/server.key";
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
+
+    let acceptor = TlsServerAcceptor::new(SERVER_CERT, SERVER_KEY, Some(CA_CERT))?;
     let service: Service<SledDb> = ServiceInner::new(SledDb::new("tmp/kvserver"))
         .fn_berfore_send(|res| match res.message.as_ref() {
             "" => res.message = "message is empty".into(),
@@ -19,6 +26,7 @@ async fn main() -> Result<()> {
     info!("Listening on 127.0.0.1:8080");
     loop {
         let (stream, _) = listener.accept().await?;
+        let stream = acceptor.accept(stream).await?;
         let mut stream = Framed::new(stream, LengthDelimitedCodec::new());
         let svc = service.clone();
         //复用Bytemut 避免重新分配

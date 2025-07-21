@@ -105,6 +105,17 @@ impl From<Vec<Kvpair>> for CommandResponse {
         }
     }
 }
+
+impl From<Vec<Value>> for CommandResponse {
+    fn from(values: Vec<Value>) -> Self {
+        Self {
+            status: 200,
+            message: "success".to_string(),
+            values,
+            pairs: vec![],
+        }
+    }
+}
 impl From<i64> for Value {
     fn from(value: i64) -> Self {
         Self {

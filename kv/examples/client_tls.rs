@@ -1,17 +1,26 @@
 use anyhow::Result;
 use bytes::Bytes;
 use futures::{SinkExt, StreamExt};
-use kv::{CommandRequest, CommandResponse};
+use kv::{CommandRequest, CommandResponse, TlsClientConnector};
 use prost::Message;
 use tokio::net::TcpStream;
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::info;
+const CA_CERT: &str = "fixtures/ca.cert";
+const CLIENT_CERT: &str = "fixtures/client.cert";
+const CLIENT_KEY: &str = "fixtures/client.key";
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     let addr = "127.0.0.1:8080";
     let stream = TcpStream::connect(addr).await?;
+    let connector = TlsClientConnector::new(
+        "kvserver.lianwei.inc",
+        Some((CLIENT_CERT, CLIENT_KEY)),
+        Some(CA_CERT),
+    )?;
+    let stream = connector.connect(stream).await?;
     let mut stream = Framed::new(stream, LengthDelimitedCodec::new());
     let mut cmds = Vec::new();
     // 创建命令
