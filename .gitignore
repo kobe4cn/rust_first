@@ -1,3 +1,6 @@
 /target
 
 /kv/tmp
+
+/kv/fixtures/*.cert
+/kv/fixtures/*.key
