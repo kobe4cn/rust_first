@@ -7,8 +7,8 @@ use tokio::net::TcpListener;
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use tracing::info;
 const CA_CERT: &str = "fixtures/ca.cert";
-const CLIENT_CERT: &str = "fixtures/client.cert";
-const CLIENT_KEY: &str = "fixtures/client.key";
+// const CLIENT_CERT: &str = "fixtures/client.cert";
+// const CLIENT_KEY: &str = "fixtures/client.key";
 const SERVER_CERT: &str = "fixtures/server.cert";
 const SERVER_KEY: &str = "fixtures/server.key";
 #[tokio::main]

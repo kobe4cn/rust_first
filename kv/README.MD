@@ -16,9 +16,9 @@
 - 两者均实现了统一的 `Storage` trait，支持 get/set/delete/contains/get_all 等操作。
 
 ### 2. 命令与服务
-- **CommandRequest / CommandResponse**：定义了客户端与服务端之间的消息协议，支持多种命令（如 hset/hget/hgetall 等）。
-- **ServiceInner<S>**：服务内部结构，持有存储引擎实例，并支持注册事件钩子（如收到请求、执行后、发送前/后）。
-- **Service<S>**：对外暴露的服务对象，封装了命令分发与事件通知逻辑，支持多线程安全 clone。
+- **CommandRequest/CommandResponse**：定义了客户端与服务端之间的消息协议，支持多种命令（如 hset/hget/hgetall 等）。
+- **ServiceInner**：服务内部结构，持有存储引擎实例，并支持注册事件钩子（如收到请求、执行后、发送前/后）。
+- **Service**：对外暴露的服务对象，封装了命令分发与事件通知逻辑，支持多线程安全 clone。
 
 ### 3. TLS 网络支持
 - **TlsServerAcceptor**：服务器端 TLS 握手器，负责加载服务器证书/私钥、可选的客户端 CA 证书，实现单向或双向认证。
