@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Rust Test Generator",
+  "description": "Automatically creates test cases for each .rs file after saving and runs the tests",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.rs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A Rust source file has been saved. Please analyze the code in the file and create comprehensive test cases for all functions, structs, and modules. After creating the tests, automatically run `cargo test` to execute them. Make sure to:\n\n1. Analyze the saved .rs file and understand its functionality\n2. Create unit tests for all public functions and methods\n3. Create integration tests if appropriate\n4. Add tests for edge cases and error conditions\n5. Ensure tests follow Rust testing conventions\n6. Place tests in appropriate locations (inline #[cfg(test)] modules or separate test files)\n7. Run the tests automatically after creation\n8. Report the test results\n\nFocus on creating meaningful, comprehensive test coverage for the Rust code."
+  }
+}
